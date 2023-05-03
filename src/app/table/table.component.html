@@ -1,0 +1,26 @@
+<table class="table">
+  <thead class="table-headers">
+  <tr>
+    <th
+      #headerEl
+      class="thTable-header"
+      (click)="sortBy($event.currentTarget)"
+      [attr.data-sortheadervalue]="header"
+      *ngFor="let header of tableHeaders; let i = index ">
+      <div class="table-header" >
+        <span> {{header | uppercase}}</span>
+        <div class="sort-arrows">
+          <span [ngClass]="headerEl.dataset['sortbyvalue'] === 'up' ? 'black' : 'grey' ">▲</span>
+          <span [ngClass]="headerEl.dataset['sortbyvalue'] === 'down' ? 'black' : 'grey' ">▼</span>
+        </div>
+      </div>
+    </th>
+
+  </tr>
+  </thead>
+  <tbody class="table-body" *ngIf="tableHeaders.length > 0">
+  <tr *ngFor="let item of tableData">
+    <td *ngFor="let itemParam of tableHeaders; let i = index">{{item[itemParam]}}</td>
+  </tr>
+  </tbody>
+</table>

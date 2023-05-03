@@ -1,0 +1,101 @@
+
+:host{
+  width: 100%;
+
+  .table {
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+
+    .table-headers{
+      position: sticky;
+      top: 0;
+      background-color: darkgray;
+      border-bottom: 1px solid black;
+
+      tr th {
+        background-color: gainsboro;
+        height: 60px;
+        border-right: 1px solid lightslategray;
+        padding: 0 6px;
+
+        &.active{
+          cursor: pointer;
+          background-color: rgba(0,0,0, 0.1);
+        }
+
+        &:hover{
+          cursor: pointer;
+          background-color: rgba(0,0,0, 0.1);
+        }
+
+        .table-header{
+          display: flex;
+          justify-content: center;
+          gap: 4px;
+
+          .sort-arrows{
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            height: 20px;
+
+            span{
+              padding: 0;
+              margin: 0;
+              font-size: 12px ;
+              line-height: 50%;
+              color: lightslategray;
+
+              &.black{
+                color: black;
+              }
+
+              &.grey{
+                color: grey;
+              }
+
+              &:hover{
+                cursor: pointer;
+                color: black;
+              }
+            }
+        }
+
+        }
+      }
+    }
+
+
+
+    tbody tr{
+      td{
+        border: black solid 1px;
+        border-left: none;
+        min-height: 25px;
+        min-width: 30px;
+        max-width: 400px;
+        overflow: hidden;
+      }
+
+      &:nth-child(even){
+        background-color: rgba(0,0,0,0.1);
+      }
+      &:hover{
+        cursor: pointer;
+        background-color: rgba(0,0,0,0.3);
+      }
+    }
+  }
+}
+
+
+tbody.table.body tr td.last {
+  border-right: none;
+}
+
+tbody.table.body tr.active {
+  background-color: gainsboro;
+  cursor: pointer;
+}
