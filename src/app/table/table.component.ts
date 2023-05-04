@@ -46,8 +46,9 @@ export class TableComponent<T> implements OnInit, OnChanges {
   }
 
   public sortBy(target: EventTarget | null):void{
+
     const sortBtn = target as HTMLElement;
-    const sortHeaders = document.querySelectorAll('.thTable-header');
+    const sortHeaders = document.querySelectorAll('.table-header');
     const dataHeader = sortBtn.dataset['sortheadervalue'];
     const dataSortBy = sortBtn.dataset['sortbyvalue'];
 
@@ -74,6 +75,7 @@ export class TableComponent<T> implements OnInit, OnChanges {
     }
 
     sortBtn.classList.add('active');
+
 
   }
 

@@ -1,0 +1,44 @@
+:host{
+
+
+  .table-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    height: 100%;
+    width: 100%;
+
+
+    .sort-arrows{
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      height: 20px;
+
+      span{
+        padding: 0;
+        margin: 0;
+        font-size: 12px ;
+        line-height: 50%;
+        color: lightslategray;
+
+        &.black{
+          color: black;
+        }
+
+        &.grey{
+          color: grey;
+        }
+
+        &:hover{
+          cursor: pointer;
+          color: black;
+        }
+      }
+    }
+
+  }
+
+
+}

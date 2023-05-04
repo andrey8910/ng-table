@@ -8,11 +8,13 @@ import {MatSelectModule} from '@angular/material/select';
 import { TableComponent } from './table/table.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { TableHeaderComponent } from './table-header/table-header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TableComponent
+    TableComponent,
+    TableHeaderComponent
   ],
   imports: [
     BrowserModule,
