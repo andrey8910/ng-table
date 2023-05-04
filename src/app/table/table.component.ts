@@ -7,6 +7,7 @@ import {
   SimpleChanges
 } from '@angular/core';
 import {FormBuilder} from "@angular/forms";
+import {TableDataService} from "../services/table-data.service";
 
 
 @Component({
@@ -27,6 +28,7 @@ export class TableComponent<T> implements OnInit, OnChanges {
   constructor(
     private ref: ChangeDetectorRef,
     private fb: FormBuilder,
+    private tableDataService: TableDataService,
   ) {}
 
 
@@ -49,47 +51,21 @@ export class TableComponent<T> implements OnInit, OnChanges {
 
     const sortBtn = target as HTMLElement;
     const sortHeaders = document.querySelectorAll('.table-header');
-    const dataHeader = sortBtn.dataset['sortheadervalue'];
-    const dataSortBy = sortBtn.dataset['sortbyvalue'];
 
     sortHeaders.forEach(el => {
       if(el.classList.contains('active')){
         el.classList.remove('active');
-        this.ref.markForCheck();
       }
       if(el !== sortBtn){
         el.removeAttribute('data-sortbyvalue');
       }
+      this.ref.markForCheck();
     })
 
-    if(!dataSortBy && dataHeader){
-      sortBtn.dataset['sortbyvalue'] = 'up';
-      this.ref.markForCheck();
-    }
-
-
-    if(sortBtn.dataset['sortbyvalue'] && dataHeader){
-      dataSortBy === 'up' ? sortBtn.dataset['sortbyvalue'] = 'down' : sortBtn.dataset['sortbyvalue'] = 'up';
-      this.ref.markForCheck();
-      this.sort(dataHeader, sortBtn.dataset['sortbyvalue']);
-    }
-
-    sortBtn.classList.add('active');
-
-
-  }
-
-  private sort(what: string, how: string): void {
-    if(!this.tableData.length){
-      return
-    }
-    if(how == 'up' && this.tableData.length){
-      this.tableData.sort((a, b) => a[what] < b[what] ? 1 : -1);
-      this.ref.markForCheck();
-    }
-
-    if(how == 'down'){
-      this.tableData.sort((a, b) => a[what] > b[what] ? 1 : -1);
+    if(sortBtn.dataset['sortheadervalue']){
+      sortBtn.dataset['sortbyvalue'] === 'up' ? sortBtn.dataset['sortbyvalue'] = 'down' : sortBtn.dataset['sortbyvalue'] = 'up';
+      this.tableData = [...this.tableDataService.sortData(this.tableData, sortBtn.dataset['sortheadervalue'], sortBtn.dataset['sortbyvalue'])];
+      sortBtn.classList.add('active');
       this.ref.markForCheck();
     }
 

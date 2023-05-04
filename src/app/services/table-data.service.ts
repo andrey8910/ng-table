@@ -40,4 +40,21 @@ export class TableDataService {
       })
     ).subscribe();
   }
+
+  sortData(sortData: any[], field:string, sortBy: string ):ProductData[] | UsersData[]{
+
+    if(!sortData){
+      return []
+    }
+
+    if(sortBy === 'up' ){
+      return sortData.sort((a , b) => a[field] > b[field] ? 1 : -1);
+    }
+
+    if(sortBy === 'down'){
+      return sortData.sort((a , b) => a[field] < b[field] ? 1 : -1);
+    }
+    return sortData
+  }
+
 }

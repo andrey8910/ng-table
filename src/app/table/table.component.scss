@@ -18,22 +18,8 @@
         background-color: gainsboro;
         height: 60px;
         border-right: 1px solid lightslategray;
-        padding: 0 6px;
-
-        &.active{
-          cursor: pointer;
-          background-color: rgba(0,0,0, 0.1);
-        }
-
-        &:hover{
-          cursor: pointer;
-          background-color: rgba(0,0,0, 0.1);
-        }
-
       }
     }
-
-
 
     tbody tr{
       td{

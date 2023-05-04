@@ -10,6 +10,17 @@
     width: 100%;
 
 
+    &:hover{
+      cursor: pointer;
+      background-color: rgba(0,0,0, 0.1);
+    }
+
+    &.active{
+      cursor: pointer;
+      background-color: rgba(0,0,0, 0.1);
+    }
+
+
     .sort-arrows{
       display: flex;
       flex-direction: column;
