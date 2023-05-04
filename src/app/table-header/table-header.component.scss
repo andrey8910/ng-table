@@ -1,6 +1,4 @@
 :host{
-
-
   .table-header{
     display: flex;
     justify-content: center;
@@ -17,7 +15,8 @@
 
     &.active{
       cursor: pointer;
-      background-color: rgba(0,0,0, 0.1);
+      background-color: rgba(0,0,0, 0.2);
+      border-radius: 6px;
     }
 
 
@@ -50,6 +49,5 @@
     }
 
   }
-
 
 }

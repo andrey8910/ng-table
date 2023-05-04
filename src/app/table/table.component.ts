@@ -3,7 +3,6 @@ import {
   Component,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges
 } from '@angular/core';
 import {FormBuilder} from "@angular/forms";
@@ -16,7 +15,7 @@ import {TableDataService} from "../services/table-data.service";
   styleUrls: ['./table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TableComponent<T> implements OnInit, OnChanges {
+export class TableComponent<T> implements  OnChanges {
   @Input('tableData$') tableDataSource : T[]|null;
   @Input() defaultFields: number;
 
@@ -32,10 +31,6 @@ export class TableComponent<T> implements OnInit, OnChanges {
     private tableDataService: TableDataService,
   ) {}
 
-
-  ngOnInit() {
-  }
-
   ngOnChanges(changes: SimpleChanges) {
     if(this.tableDataSource && this.tableDataSource.length){
       const firstItem = this.tableDataSource[0];
@@ -43,7 +38,7 @@ export class TableComponent<T> implements OnInit, OnChanges {
         this.tableFields = Object.keys(firstItem);
         this.tableFieldsControl.setValue(this.tableFields.slice(0,this.defaultFields));
       }
-      this.tableData = [...this.tableDataSource, ...this.tableData];
+      this.tableData = [...this.tableDataSource];
       this.ref.markForCheck();
     }
   }
