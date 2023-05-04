@@ -5,7 +5,7 @@
     (click)="sortBy($event.currentTarget)"
     [attr.data-sortheadervalue]="field"
   >
-    <span> {{field | uppercase}}</span>
+    <span onmousedown="return false"> {{field | uppercase}}</span>
     <div class="sort-arrows">
       <span [ngClass]="el.dataset['sortbyvalue'] === 'up' ? 'black' : 'grey' ">▲</span>
       <span [ngClass]="el.dataset['sortbyvalue'] === 'down' ? 'black' : 'grey' ">▼</span>

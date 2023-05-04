@@ -18,6 +18,7 @@ import {TableDataService} from "../services/table-data.service";
 })
 export class TableComponent<T> implements OnInit, OnChanges {
   @Input('tableData$') tableDataSource : T[]|null;
+  @Input() defaultFields: number;
 
   sortToggle = false;
   tableData : any[] = [];
@@ -40,7 +41,7 @@ export class TableComponent<T> implements OnInit, OnChanges {
       const firstItem = this.tableDataSource[0];
       if(firstItem){
         this.tableFields = Object.keys(firstItem);
-        this.tableFieldsControl.setValue(this.tableFields.slice(0,5));
+        this.tableFieldsControl.setValue(this.tableFields.slice(0,this.defaultFields));
       }
       this.tableData = [...this.tableDataSource, ...this.tableData];
       this.ref.markForCheck();

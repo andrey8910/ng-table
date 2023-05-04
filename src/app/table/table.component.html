@@ -4,7 +4,7 @@
     <mat-select-trigger>
       {{tableFieldsControl.value[0] || ''}}
       <span *ngIf="(tableFieldsControl.value.length || 0) > 1" class="example-additional-selection">
-        (+{{(tableFieldsControl.value.length || 0) - 1}} {{tableFieldsControl.value.length === 2 ? 'other' : 'others'}})
+        (+{{tableFieldsControl.value.length || 0}} {{tableFieldsControl.value.length === 2 ? 'other' : 'others'}})
       </span>
     </mat-select-trigger>
     <mat-option *ngFor="let field of tableFields" [value]="field">{{field}}</mat-option>
