@@ -6,6 +6,7 @@ import {
   OnInit,
   SimpleChanges
 } from '@angular/core';
+import {FormBuilder} from "@angular/forms";
 
 
 @Component({
@@ -18,11 +19,14 @@ export class TableComponent<T> implements OnInit, OnChanges {
   @Input('tableData$') tableDataSource : T[]|null;
 
   sortToggle = false;
-  tableData : any[];
-  tableHeaders : string[] = [];
+  tableData : any[] = [];
+  tableFields : string[] = [];
+
+  tableFieldsControl = this.fb.nonNullable.control(['']);
 
   constructor(
     private ref: ChangeDetectorRef,
+    private fb: FormBuilder,
   ) {}
 
 
@@ -33,10 +37,10 @@ export class TableComponent<T> implements OnInit, OnChanges {
     if(this.tableDataSource && this.tableDataSource.length){
       const firstItem = this.tableDataSource[0];
       if(firstItem){
-        this.tableHeaders = Object.keys(firstItem);
-        this.tableHeaders = Object.keys(firstItem);
+        this.tableFields = Object.keys(firstItem);
+        this.tableFieldsControl.setValue(this.tableFields.slice(0,5));
       }
-      this.tableData = this.tableDataSource;
+      this.tableData = [...this.tableDataSource, ...this.tableData];
       this.ref.markForCheck();
     }
   }

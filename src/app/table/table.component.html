@@ -1,3 +1,16 @@
+<mat-form-field appearance="fill">
+  <mat-label>Table fields</mat-label>
+  <mat-select [formControl]="tableFieldsControl" multiple>
+    <mat-select-trigger>
+      {{tableFieldsControl.value[0] || ''}}
+      <span *ngIf="(tableFieldsControl.value.length || 0) > 1" class="example-additional-selection">
+        (+{{(tableFieldsControl.value.length || 0) - 1}} {{tableFieldsControl.value.length === 2 ? 'other' : 'others'}})
+      </span>
+    </mat-select-trigger>
+    <mat-option *ngFor="let field of tableFields" [value]="field">{{field}}</mat-option>
+  </mat-select>
+</mat-form-field>
+
 <table class="table">
   <thead class="table-headers">
   <tr>
@@ -6,7 +19,7 @@
       class="thTable-header"
       (click)="sortBy($event.currentTarget)"
       [attr.data-sortheadervalue]="header"
-      *ngFor="let header of tableHeaders; let i = index ">
+      *ngFor="let header of tableFieldsControl.value; let i = index ">
       <div class="table-header" >
         <span> {{header | uppercase}}</span>
         <div class="sort-arrows">
@@ -18,9 +31,10 @@
 
   </tr>
   </thead>
-  <tbody class="table-body" *ngIf="tableHeaders.length > 0">
+  <tbody class="table-body">
   <tr *ngFor="let item of tableData">
-    <td *ngFor="let itemParam of tableHeaders; let i = index">{{item[itemParam]}}</td>
+    <td *ngFor="let itemParam of tableFieldsControl.value; let i = index">{{item[itemParam]}}</td>
   </tr>
   </tbody>
 </table>
+
