@@ -5,6 +5,8 @@ import {AllProductsData} from "../interfaces/all-products-data";
 import {ProductData} from "../interfaces/product-data";
 import {AllUsersData} from "../interfaces/all-users-data";
 import {UsersData} from "../interfaces/users-data";
+import {ActiveSortField} from "../interfaces/active-sort-field";
+import {SortingMethod} from "../interfaces/sorting-method";
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +18,9 @@ export class TableDataService {
 
   private allUsersData = new BehaviorSubject<UsersData[]>([]);
   readonly allUsersData$ = this.allUsersData.asObservable();
+
+  private activeSortField = new BehaviorSubject<ActiveSortField>({field:'', element:null});
+  readonly activeSortField$ = this.activeSortField.asObservable();
 
   constructor(private httpClient : HttpClient) { }
 
@@ -41,17 +46,25 @@ export class TableDataService {
     ).subscribe();
   }
 
-  sortData(sortData: any[], field:string, sortBy: string ):ProductData[] | UsersData[]{
+  replaceActiveField(field:string, el: HTMLElement):void{
+    const activeField: ActiveSortField = {
+      field: field,
+      element: el
+    }
+    this.activeSortField.next(activeField);
+  }
+
+  sortData(sortData: any[], field:string, sortBy: SortingMethod ):ProductData[] | UsersData[]{
 
     if(!sortData){
       return []
     }
 
-    if(sortBy === 'up' ){
+    if(sortBy === 'ascending' ){
       return sortData.sort((a , b) => a[field] > b[field] ? 1 : -1);
     }
 
-    if(sortBy === 'down'){
+    if(sortBy === 'descending'){
       return sortData.sort((a , b) => a[field] < b[field] ? 1 : -1);
     }
     return sortData

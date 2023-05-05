@@ -1,14 +1,9 @@
 
-  <div
-    #el
-    class="table-header"
-    (click)="sortBy($event.currentTarget)"
-    [attr.data-sortheadervalue]="field"
-  >
+  <div class="table-header">
     <span onmousedown="return false"> {{field | uppercase}}</span>
     <div class="sort-arrows">
-      <span [ngClass]="el.dataset['sortbyvalue'] === 'up' ? 'black' : 'grey' ">▲</span>
-      <span [ngClass]="el.dataset['sortbyvalue'] === 'down' ? 'black' : 'grey' ">▼</span>
+      <span [ngClass]="sortBy === 'ascending' ? 'black' : 'grey' ">▲</span>
+      <span [ngClass]="sortBy === 'descending' ? 'black' : 'grey' ">▼</span>
     </div>
   </div>
 

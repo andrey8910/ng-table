@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import {FormBuilder} from "@angular/forms";
 import {TableDataService} from "../services/table-data.service";
+import {SortingMethod} from "../interfaces/sorting-method";
 
 
 @Component({
@@ -43,28 +44,8 @@ export class TableComponent<T> implements  OnChanges {
     }
   }
 
-  public sortBy(target: EventTarget | null):void{
-
-    const sortBtn = target as HTMLElement;
-    const sortHeaders = document.querySelectorAll('.table-header');
-
-    sortHeaders.forEach(el => {
-      if(el.classList.contains('active')){
-        el.classList.remove('active');
-      }
-      if(el !== sortBtn){
-        el.removeAttribute('data-sortbyvalue');
-      }
-      this.ref.markForCheck();
-    })
-
-    if(sortBtn.dataset['sortheadervalue']){
-      sortBtn.dataset['sortbyvalue'] === 'up' ? sortBtn.dataset['sortbyvalue'] = 'down' : sortBtn.dataset['sortbyvalue'] = 'up';
-      this.tableData = [...this.tableDataService.sortData(this.tableData, sortBtn.dataset['sortheadervalue'], sortBtn.dataset['sortbyvalue'])];
-      sortBtn.classList.add('active');
-      this.ref.markForCheck();
-    }
-
+  public sortBy(toSort: {field:string,sortMethod:SortingMethod}):void{
+    this.tableData = [...this.tableDataService.sortData(this.tableData, toSort.field, toSort.sortMethod)];
+    this.ref.markForCheck();
   }
-
 }

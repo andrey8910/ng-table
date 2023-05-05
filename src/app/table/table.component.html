@@ -20,26 +20,9 @@
       *ngFor="let header of tableFieldsControl.value; let i = index ">
       <app-table-header
         [field] = "header"
-        (onSort)="sortBy($event)"
+        (toSort)="sortBy($event)"
       ></app-table-header>
     </th>
-
-<!--    <th-->
-<!--      #headerEl-->
-<!--      class="thTable-header"-->
-<!--      (click)="sortBy($event.currentTarget)"-->
-<!--      [attr.data-sortheadervalue]="header"-->
-<!--      *ngFor="let header of tableFieldsControl.value; let i = index ">-->
-<!--      <app-table-header></app-table-header>-->
-<!--      <div class="table-header" >-->
-<!--        <span> {{header | uppercase}}</span>-->
-<!--        <div class="sort-arrows">-->
-<!--          <span [ngClass]="headerEl.dataset['sortbyvalue'] === 'up' ? 'black' : 'grey' ">▲</span>-->
-<!--          <span [ngClass]="headerEl.dataset['sortbyvalue'] === 'down' ? 'black' : 'grey' ">▼</span>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </th>-->
-
   </tr>
   </thead>
   <tbody class="table-body">
