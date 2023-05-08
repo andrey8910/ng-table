@@ -23,7 +23,7 @@ import {SortingMethod} from "../interfaces/sorting-method";
 export class TableHeaderComponent implements OnInit{
 
   @Input() field: string;
-  @Output() toSort = new EventEmitter<{field: string, sortMethod:SortingMethod}>();
+  @Output() toSort = new EventEmitter<{field: any, sortMethod:SortingMethod}>();
 
   @HostListener("click") onClick() {
     this.isActive = false;

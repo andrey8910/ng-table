@@ -20,11 +20,14 @@ export class TableComponent<T> implements  OnChanges {
   @Input('tableData$') tableDataSource : T[]|null;
   @Input() defaultFields: number;
 
+
   sortToggle = false;
-  tableData : any[] = [];
+  tableData : T[] = [];
   tableFields : string[] = [];
 
   tableFieldsControl = this.fb.nonNullable.control(['']);
+
+  getKeyValue = <O, K extends keyof O>(obj: O, key: K): O[K] => obj[key];
 
   constructor(
     private ref: ChangeDetectorRef,
@@ -44,7 +47,7 @@ export class TableComponent<T> implements  OnChanges {
     }
   }
 
-  public sortBy(toSort: {field:string,sortMethod:SortingMethod}):void{
+  public sortBy(toSort: {field: keyof T,sortMethod:SortingMethod}):void{
     this.tableData = [...this.tableDataService.sortData(this.tableData, toSort.field, toSort.sortMethod)];
     this.ref.markForCheck();
   }

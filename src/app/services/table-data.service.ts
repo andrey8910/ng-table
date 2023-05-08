@@ -54,7 +54,7 @@ export class TableDataService {
     this.activeSortField.next(activeField);
   }
 
-  sortData(sortData: any[], field:string, sortBy: SortingMethod ):ProductData[] | UsersData[]{
+  sortData<T>(sortData: T[], field: keyof T, sortBy: SortingMethod ):T[]{
 
     if(!sortData){
       return []
