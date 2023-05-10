@@ -7,7 +7,6 @@ import {
   Input, OnDestroy,
   OnInit,
   Output,
-  ViewChild
 } from '@angular/core';
 import {TableDataService} from "../services/table-data.service";
 import {Observable, Subject, takeUntil, tap} from "rxjs";
@@ -24,7 +23,7 @@ import {SortingMethod} from "../interfaces/sorting-method";
 export class TableHeaderComponent implements OnInit, OnDestroy{
 
   @Input() field: string;
-  @Output() sortChange = new EventEmitter<{field: any, sortMethod:SortingMethod}>();
+  @Output() sortChange = new EventEmitter<{field: string, sortMethod:SortingMethod}>();
 
   @HostListener("click") onClick() {
     this.isActive = false;
@@ -39,9 +38,6 @@ export class TableHeaderComponent implements OnInit, OnDestroy{
 
   @HostBinding("class.active")
   primaryClass = false;
-
-  @ViewChild("el") headerEl: ElementRef;
-
   isActive = false;
   sortBy: SortingMethod = 'none';
   activeSortField$ : Observable<ActiveSortField> = this.tableDataService.activeSortField$;
@@ -67,7 +63,7 @@ export class TableHeaderComponent implements OnInit, OnDestroy{
 
       }),
       tap((sortField: ActiveSortField) => {
-        if(this.headerEl && this.isActive){
+        if(this.isActive){
           this.primaryClass = this.field === sortField.field;
           this.ref.markForCheck();
         }
