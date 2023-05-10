@@ -1,19 +1,19 @@
 <main>
   <div class="table-container">
     <app-table
-      [tableData$] = "allProductsData$ | async"
-      [defaultFields] = "6"
+      [tableSource] = "allProductsData$ | async"
+      [defaultNumberFields] = "6"
     ></app-table>
   </div>
   <div class="table-container">
     <app-table
-      [tableData$] = "allUsersData$ | async"
-      [defaultFields] = "5"
+      [tableSource] = "allUsersData$ | async"
+      [defaultNumberFields] = "5"
     ></app-table>
   </div>
   <div class="table-container">
     <app-table
-      [tableData$] = "allProductsData$ | async"
+      [tableSource] = "allProductsData$ | async"
     ></app-table>
   </div>
 </main>

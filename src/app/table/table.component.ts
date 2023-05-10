@@ -2,8 +2,6 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   Input,
-  OnChanges,
-  SimpleChanges
 } from '@angular/core';
 import {FormBuilder} from "@angular/forms";
 import {TableDataService} from "../services/table-data.service";
@@ -17,14 +15,27 @@ import {SortingMethod} from "../interfaces/sorting-method";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class TableComponent implements OnChanges {
-  @Input('tableData$') tableDataSource: Record<string, any>[] | null;
-  @Input() defaultFields: number;
+export class TableComponent {
+  @Input('tableSource') set tableDataSource(valueParam:Record<string, any>[] | null) {
+    if(!valueParam || valueParam.length === 0){
+      return
+    }
+    this._tableData = valueParam;
+    this.tableFields = Object.keys(this._tableData[0]);
+    this.tableFieldsControl.setValue(this.tableFields.slice(0, this.defaultNumberFields));
+  };
 
-  sortToggle = false;
+  @Input() defaultNumberFields: number;
+
   tableData: Record<string, any>[] = [];
   tableFields: string[] = [];
   tableFieldsControl = this.fb.nonNullable.control(['']);
+
+  private _tableData : Record<string, any>[] | null;
+
+  get tableDataSource(): Record<string, any>[] | null{
+    return this._tableData;
+  }
 
   constructor(
     private ref: ChangeDetectorRef,
@@ -33,20 +44,11 @@ export class TableComponent implements OnChanges {
   ) {
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (this.tableDataSource && this.tableDataSource.length) {
-      const firstItem = this.tableDataSource[0];
-      if (firstItem) {
-        this.tableFields = Object.keys(firstItem);
-        this.tableFieldsControl.setValue(this.tableFields.slice(0, this.defaultFields));
-      }
-      this.tableData = [...this.tableDataSource];
-      this.ref.markForCheck();
-    }
-  }
-
   public sortBy(toSort: { field: string, sortMethod: SortingMethod }): void {
-    this.tableData = [...this.tableDataService.sortData(this.tableData, toSort.field, toSort.sortMethod)];
-    this.ref.markForCheck();
+   if(!this.tableDataSource){
+     return
+   }
+   this.tableDataSource = [...this.tableDataService.sortData(this.tableDataSource, toSort.field, toSort.sortMethod)];
+   this.ref.markForCheck();
   }
 }
