@@ -16,38 +16,36 @@ import {SortingMethod} from "../interfaces/sorting-method";
   styleUrls: ['./table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TableComponent<T> implements  OnChanges {
-  @Input('tableData$') tableDataSource : T[]|null;
+
+export class TableComponent implements OnChanges {
+  @Input('tableData$') tableDataSource: Record<string, any>[] | null;
   @Input() defaultFields: number;
 
-
   sortToggle = false;
-  tableData : T[] = [];
-  tableFields : string[] = [];
-
+  tableData: Record<string, any>[] = [];
+  tableFields: string[] = [];
   tableFieldsControl = this.fb.nonNullable.control(['']);
-
-  getKeyValue = <O, K extends keyof O>(obj: O, key: K): O[K] => obj[key];
 
   constructor(
     private ref: ChangeDetectorRef,
     private fb: FormBuilder,
     private tableDataService: TableDataService,
-  ) {}
+  ) {
+  }
 
   ngOnChanges(changes: SimpleChanges) {
-    if(this.tableDataSource && this.tableDataSource.length){
+    if (this.tableDataSource && this.tableDataSource.length) {
       const firstItem = this.tableDataSource[0];
-      if(firstItem){
+      if (firstItem) {
         this.tableFields = Object.keys(firstItem);
-        this.tableFieldsControl.setValue(this.tableFields.slice(0,this.defaultFields));
+        this.tableFieldsControl.setValue(this.tableFields.slice(0, this.defaultFields));
       }
       this.tableData = [...this.tableDataSource];
       this.ref.markForCheck();
     }
   }
 
-  public sortBy(toSort: {field: keyof T,sortMethod:SortingMethod}):void{
+  public sortBy(toSort: { field: string, sortMethod: SortingMethod }): void {
     this.tableData = [...this.tableDataService.sortData(this.tableData, toSort.field, toSort.sortMethod)];
     this.ref.markForCheck();
   }

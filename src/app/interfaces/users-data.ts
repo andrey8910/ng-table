@@ -1,5 +1,5 @@
 export interface UsersData {
-  ["id"]: number,
+  "id": number,
   "firstName": string,
   "lastName": string,
   "maidenName": string,

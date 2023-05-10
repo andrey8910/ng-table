@@ -4,14 +4,13 @@ import {Observable} from "rxjs";
 import {ProductData} from "./interfaces/product-data";
 import {UsersData} from "./interfaces/users-data";
 
-
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
 export class AppComponent implements OnInit{
   title = 'ng-table';
 

@@ -4,13 +4,13 @@ import {
   ElementRef,
   EventEmitter,
   HostBinding, HostListener,
-  Input,
+  Input, OnDestroy,
   OnInit,
   Output,
   ViewChild
 } from '@angular/core';
 import {TableDataService} from "../services/table-data.service";
-import {Observable, tap} from "rxjs";
+import {Observable, Subject, takeUntil, tap} from "rxjs";
 import {ActiveSortField} from "../interfaces/active-sort-field";
 import {SortingMethod} from "../interfaces/sorting-method";
 
@@ -20,30 +20,33 @@ import {SortingMethod} from "../interfaces/sorting-method";
   styleUrls: ['./table-header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TableHeaderComponent implements OnInit{
+
+export class TableHeaderComponent implements OnInit, OnDestroy{
 
   @Input() field: string;
-  @Output() toSort = new EventEmitter<{field: any, sortMethod:SortingMethod}>();
+  @Output() sortChange = new EventEmitter<{field: any, sortMethod:SortingMethod}>();
 
   @HostListener("click") onClick() {
     this.isActive = false;
     if(this.sortBy === 'none'){
       this.sortBy ='descending'
     }
-    this.sortBy === 'ascending'? this.sortBy ='descending' : this.sortBy = 'ascending';
+    this.sortBy = this.sortBy === 'ascending'? 'descending' : 'ascending';
     this.ref.markForCheck();
     this.tableDataService.replaceActiveField(this.field, this.elementRef.nativeElement);
-    this.toSort.emit({field:this.field, sortMethod:this.sortBy});
+    this.sortChange.emit({field:this.field, sortMethod:this.sortBy});
   }
 
   @HostBinding("class.active")
-  primaryClass: boolean = false;
+  primaryClass = false;
 
-  @ViewChild("el") headerEl: ElementRef|undefined;
+  @ViewChild("el") headerEl: ElementRef;
 
   isActive = false;
   sortBy: SortingMethod = 'none';
   activeSortField$ : Observable<ActiveSortField> = this.tableDataService.activeSortField$;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private tableDataService:TableDataService,
@@ -60,15 +63,21 @@ export class TableHeaderComponent implements OnInit{
           this.sortBy = 'none';
           this.ref.markForCheck();
         }
-        sortField.element === this.elementRef.nativeElement ? this.isActive = true : this.isActive = false;
+        this.isActive =  sortField.element === this.elementRef.nativeElement;
 
       }),
       tap((sortField: ActiveSortField) => {
         if(this.headerEl && this.isActive){
-          this.field === sortField.field ? this.primaryClass = true : this.primaryClass = false;
+          this.primaryClass = this.field === sortField.field;
           this.ref.markForCheck();
         }
-      })
+      }),
+      takeUntil(this.destroy$),
     ).subscribe()
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

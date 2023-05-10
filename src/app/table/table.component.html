@@ -20,15 +20,14 @@
       *ngFor="let header of tableFieldsControl.value; let i = index ">
       <app-table-header
         [field] = "header"
-        (toSort)="sortBy($event)"
+        (sortChange)="sortBy($event)"
       ></app-table-header>
     </th>
   </tr>
   </thead>
   <tbody class="table-body">
   <tr *ngFor="let item of tableData">
-    <td *ngFor="let itemParam of tableFieldsControl.value  let i = index">{{getKeyValue(item, itemParam)}}</td>
-<!--    <td *ngFor="let itemParam of tableFieldsControl.value  let i = index">{{item[itemParam]}}</td>-->
+    <td *ngFor="let itemParam of tableFieldsControl.value  let i = index">{{item[itemParam]}}</td>
   </tr>
   </tbody>
 </table>
