@@ -22,6 +22,7 @@ export class TableComponent {
     }
     this._tableData = valueParam;
     this.tableFields = Object.keys(this._tableData[0]);
+    //console.log(this.tableFields, Date.now())
     this.tableFieldsControl.setValue(this.tableFields.slice(0, this.defaultNumberFields));
   };
 
@@ -30,6 +31,7 @@ export class TableComponent {
   tableData: Record<string, any>[] = [];
   tableFields: string[] = [];
   tableFieldsControl = this.fb.nonNullable.control(['']);
+  tableCreationTime = Date.now();
 
   private _tableData : Record<string, any>[] | null;
 

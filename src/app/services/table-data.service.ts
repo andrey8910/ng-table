@@ -19,7 +19,7 @@ export class TableDataService {
   private allUsersData = new BehaviorSubject<UsersData[]>([]);
   readonly allUsersData$ = this.allUsersData.asObservable();
 
-  private activeSortField = new BehaviorSubject<ActiveSortField>({field:'', element:null});
+  private activeSortField = new BehaviorSubject<ActiveSortField>({field:'', elementId:''});
   readonly activeSortField$ = this.activeSortField.asObservable();
 
   constructor(private httpClient : HttpClient) { }
@@ -46,10 +46,10 @@ export class TableDataService {
     ).subscribe();
   }
 
-  replaceActiveField(field:string, el: HTMLElement):void{
+  replaceActiveField(field:string, elId: string):void{
     const activeField: ActiveSortField = {
       field: field,
-      element: el
+      elementId: elId
     }
     this.activeSortField.next(activeField);
   }

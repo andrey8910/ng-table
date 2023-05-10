@@ -17,7 +17,7 @@
     <th
       class="thTable-header"
       [attr.data-sortheadervalue]="header"
-      *ngFor="let header of tableFieldsControl.value">
+      *ngFor="let header of tableFieldsControl.value; let i = index">
       <app-table-header
         [field] = "header"
         (sortChange)="sortBy($event)"

@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
-  ElementRef,
   EventEmitter,
   HostBinding, HostListener,
   Input, OnDestroy,
@@ -32,7 +31,7 @@ export class TableHeaderComponent implements OnInit, OnDestroy{
     }
     this.sortBy = this.sortBy === 'ascending'? 'descending' : 'ascending';
     this.ref.markForCheck();
-    this.tableDataService.replaceActiveField(this.field, this.elementRef.nativeElement);
+    this.tableDataService.replaceActiveField(this.field, this.headerId);
     this.sortChange.emit({field:this.field, sortMethod:this.sortBy});
   }
 
@@ -42,25 +41,27 @@ export class TableHeaderComponent implements OnInit, OnDestroy{
   sortBy: SortingMethod = 'none';
   activeSortField$ : Observable<ActiveSortField> = this.tableDataService.activeSortField$;
 
+  private headerId : string;
   private destroy$ = new Subject<void>();
 
   constructor(
     private tableDataService:TableDataService,
     private ref: ChangeDetectorRef,
-    private elementRef: ElementRef
     ) {
   }
 
   ngOnInit() {
+    if(this.field.length){
+      this.headerId = this.field + (Date.now() - this.field.length) ;
+    }
     this.activeSortField$.pipe(
       tap((sortField: ActiveSortField) => {
         this.primaryClass = false;
-        if(sortField.element !== this.elementRef.nativeElement){
+        if(sortField.elementId !== this.headerId){
           this.sortBy = 'none';
           this.ref.markForCheck();
         }
-        this.isActive =  sortField.element === this.elementRef.nativeElement;
-
+        this.isActive =  sortField.elementId === this.headerId;
       }),
       tap((sortField: ActiveSortField) => {
         if(this.isActive){
