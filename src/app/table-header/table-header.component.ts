@@ -52,7 +52,7 @@ export class TableHeaderComponent implements OnInit, OnDestroy{
 
   ngOnInit() {
     if(this.field.length){
-      this.headerId = this.field + (Date.now() - this.field.length) ;
+      this.headerId = this.field + (Date.now() - Math.trunc(Math.random() * 100)) ;
     }
     this.activeSortField$.pipe(
       tap((sortField: ActiveSortField) => {

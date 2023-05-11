@@ -21,9 +21,10 @@ export class TableComponent {
       return
     }
     this._tableData = valueParam;
-    this.tableFields = Object.keys(this._tableData[0]);
-    //console.log(this.tableFields, Date.now())
-    this.tableFieldsControl.setValue(this.tableFields.slice(0, this.defaultNumberFields));
+    if(this.tableFields.length === 0){
+      this.tableFields = Object.keys(this._tableData[0]);
+      this.tableFieldsControl.setValue(this.tableFields.slice(0, this.defaultNumberFields));
+    }
   };
 
   @Input() defaultNumberFields: number;
@@ -31,7 +32,6 @@ export class TableComponent {
   tableData: Record<string, any>[] = [];
   tableFields: string[] = [];
   tableFieldsControl = this.fb.nonNullable.control(['']);
-  tableCreationTime = Date.now();
 
   private _tableData : Record<string, any>[] | null;
 
