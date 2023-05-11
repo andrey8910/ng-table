@@ -16,20 +16,19 @@ import {SortingMethod} from "../interfaces/sorting-method";
 })
 
 export class TableComponent {
-  @Input('tableSource') set tableDataSource(valueParam:Record<string, any>[] | null) {
+  @Input() set tableDataSource(valueParam:Record<string, any>[] | null) {
     if(!valueParam || valueParam.length === 0){
       return
     }
     this._tableData = valueParam;
     if(this.tableFields.length === 0){
-      this.tableFields = Object.keys(this._tableData[0]);
+      this.tableFields = Object.keys(valueParam[0]);
       this.tableFieldsControl.setValue(this.tableFields.slice(0, this.defaultNumberFields));
     }
   };
 
   @Input() defaultNumberFields: number;
 
-  tableData: Record<string, any>[] = [];
   tableFields: string[] = [];
   tableFieldsControl = this.fb.nonNullable.control(['']);
 
