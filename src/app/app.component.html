@@ -3,12 +3,14 @@
     <app-table
       [tableDataSource] = "allProductsData$ | async"
       [defaultNumberFields] = "6"
+      [pagination] = true
     ></app-table>
   </div>
   <div class="table-container">
     <app-table
       [tableDataSource] = "allUsersData$ | async"
       [defaultNumberFields] = "5"
+      [pagination] = true
     ></app-table>
   </div>
   <div class="table-container">

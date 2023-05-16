@@ -6,6 +6,7 @@ import {
 import {FormBuilder} from "@angular/forms";
 import {TableDataService} from "../services/table-data.service";
 import {SortingMethod} from "../interfaces/sorting-method";
+import {PaginatorData} from "../interfaces/paginator-data";
 
 
 @Component({
@@ -17,24 +18,33 @@ import {SortingMethod} from "../interfaces/sorting-method";
 
 export class TableComponent {
   @Input() set tableDataSource(valueParam:Record<string, any>[] | null) {
-    if(!valueParam || valueParam.length === 0){
+    if(!valueParam){
       return
     }
     this._tableData = valueParam;
-    if(this.tableFields.length === 0){
+    if(this.tableFields.length === 0 && valueParam.length){
+      this.tableDataSourceLength = valueParam.length
       this.tableFields = Object.keys(valueParam[0]);
       this.tableFieldsControl.setValue(this.tableFields.slice(0, this.defaultNumberFields));
     }
+    this.ref.markForCheck();
   };
 
   @Input() defaultNumberFields: number;
+  @Input() pagination: boolean;
 
   tableFields: string[] = [];
   tableFieldsControl = this.fb.nonNullable.control(['']);
+  tableDataSourceLength: number;
+  startItemIndex = 0;
+  tablePagination: Record<string, any>[] = [];
 
-  private _tableData : Record<string, any>[] | null;
+  private _tableData : Record<string, any>[];
 
-  get tableDataSource(): Record<string, any>[] | null{
+  get tableDataSource(): Record<string, any>[]{
+    if(!this._tableData){
+      return []
+    }
     return this._tableData;
   }
 
@@ -49,7 +59,25 @@ export class TableComponent {
    if(!this.tableDataSource){
      return
    }
-   this.tableDataSource = [...this.tableDataService.sortData(this.tableDataSource, toSort.field, toSort.sortMethod)];
+   if(!this.pagination){
+     this.tableDataSource = [...this.tableDataService.sortData(this.tableDataSource, toSort.field, toSort.sortMethod)];
+     this.ref.markForCheck();
+     return;
+   }
+   this.tablePagination = [...this.tableDataService.sortData(this.tablePagination, toSort.field, toSort.sortMethod)];
    this.ref.markForCheck();
+  }
+
+  changePagination(dataPaginator : PaginatorData){
+
+    if(!this.tableDataSource){
+      return
+    }
+
+    if(this.tableDataSource.length){
+     this.tablePagination = [...this.tableDataService.changePagination(this.tableDataSource, dataPaginator)];
+     this.ref.markForCheck();
+    }
+
   }
 }

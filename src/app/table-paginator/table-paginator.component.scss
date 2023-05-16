@@ -1,0 +1,41 @@
+:host{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 80px;
+  padding: 0 50px;
+  background-color: rgba(0,0,0,0.1);
+
+  .paginator-block{
+    display: flex;
+    gap: 60px;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 80px;
+
+
+    .select-page-size{
+      display: flex;
+      justify-content: space-between;
+
+      .select-page-input{
+        width: 100px;
+        min-width: 60px;
+        height: 70px;
+
+      }
+    }
+
+    .quantity-items{
+      display: flex;
+      gap: 10px;
+    }
+
+    .pagination-controls{
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+  }
+}

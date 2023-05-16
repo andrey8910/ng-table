@@ -1,0 +1,46 @@
+<div class="paginator-block">
+
+  <div class="select-page-size">
+    <mat-form-field
+      class="select-page-input" appearance="fill">
+      <mat-label>Items:</mat-label>
+      <mat-select [formControl]="pageSizeControl">
+        <mat-option *ngFor="let pageSize of pageSizeOptions" [value]="pageSize">
+          {{pageSize}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="quantity-items">
+    <span>{{startItemIndex + 1}}</span>
+    <span>to</span>
+    <span>{{endItemIndex}}</span>
+    <span>of</span>
+    <span>{{tableLength}}</span>
+  </div>
+
+  <div class="pagination-controls">
+    <button mat-icon-button matTooltip="first_page" [disabled]="isFirstPage" (click)="goFirstPage()">
+      <mat-icon>first_page</mat-icon>
+    </button>
+    <button mat-icon-button matTooltip="prev" [disabled]="isFirstPage" (click)="prevPage()">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <button mat-icon-button matTooltip="next" [disabled]="isLastPage" (click)='nextPage()'>
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+    <button mat-icon-button matTooltip="last_page" [disabled]="isLastPage" (click)="goLastPage()">
+      <mat-icon>last_page</mat-icon>
+    </button>
+  </div>
+
+  <div class="page-number">
+    <span>page </span>
+    <span>{{pageIndex + 1}}</span>
+  </div>
+
+</div>
+
+
+

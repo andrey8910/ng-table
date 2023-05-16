@@ -7,6 +7,7 @@ import {AllUsersData} from "../interfaces/all-users-data";
 import {UsersData} from "../interfaces/users-data";
 import {ActiveSortField} from "../interfaces/active-sort-field";
 import {SortingMethod} from "../interfaces/sorting-method";
+import {PaginatorData} from "../interfaces/paginator-data";
 
 @Injectable({
   providedIn: 'root'
@@ -68,6 +69,10 @@ export class TableDataService {
       return sortData.sort((a , b) => a[field] < b[field] ? 1 : -1);
     }
     return sortData
+  }
+
+  changePagination<T>(paginationData: T[], dataPaginator : PaginatorData):T[]{
+    return paginationData.slice(dataPaginator.startItemIndex,dataPaginator.startItemIndex + dataPaginator.pageSize)
   }
 
 }
