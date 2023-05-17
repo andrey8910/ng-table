@@ -12,6 +12,7 @@ import {PaginatorData} from "../interfaces/paginator-data";
 @Injectable({
   providedIn: 'root'
 })
+
 export class TableDataService {
 
   private allProductsData = new BehaviorSubject<ProductData[]>([]);
@@ -20,23 +21,24 @@ export class TableDataService {
   private allUsersData = new BehaviorSubject<UsersData[]>([]);
   readonly allUsersData$ = this.allUsersData.asObservable();
 
-  private activeSortField = new BehaviorSubject<ActiveSortField>({field:'', elementId:''});
+  private activeSortField = new BehaviorSubject<ActiveSortField>({field: '', elementId: ''});
   readonly activeSortField$ = this.activeSortField.asObservable();
 
-  constructor(private httpClient : HttpClient) { }
-
-  loadAllProducts(): void{
-     this.httpClient.get<AllProductsData>('https://dummyjson.com/products?limit=100').pipe(
-       tap((allProducts: AllProductsData) => {
-         this.allProductsData.next(Object.assign([], allProducts.products));
-       }),
-       catchError((err) => {
-         throw 'error in source. Details: ' + err;
-       })
-     ).subscribe();
+  constructor(private httpClient: HttpClient) {
   }
 
-  loadAllUsers(): void{
+  loadAllProducts(): void {
+    this.httpClient.get<AllProductsData>('https://dummyjson.com/products?limit=100').pipe(
+      tap((allProducts: AllProductsData) => {
+        this.allProductsData.next(Object.assign([], allProducts.products));
+      }),
+      catchError((err) => {
+        throw 'error in source. Details: ' + err;
+      })
+    ).subscribe();
+  }
+
+  loadAllUsers(): void {
     this.httpClient.get<AllUsersData>('https://dummyjson.com/users?limit=100').pipe(
       tap((allUsersData: AllUsersData) => {
         this.allUsersData.next(Object.assign([], allUsersData.users));
@@ -47,7 +49,7 @@ export class TableDataService {
     ).subscribe();
   }
 
-  replaceActiveField(field:string, elId: string):void{
+  replaceActiveField(field: string, elId: string): void {
     const activeField: ActiveSortField = {
       field: field,
       elementId: elId
@@ -55,24 +57,24 @@ export class TableDataService {
     this.activeSortField.next(activeField);
   }
 
-  sortData<T>(sortData: T[], field: keyof T, sortBy: SortingMethod ):T[]{
+  sortData<T>(sortData: T[], field: keyof T, sortBy: SortingMethod): T[] {
 
-    if(!sortData){
+    if (!sortData) {
       return []
     }
 
-    if(sortBy === 'ascending' ){
-      return sortData.sort((a , b) => a[field] > b[field] ? 1 : -1);
+    if (sortBy === 'ascending') {
+      return sortData.sort((a, b) => a[field] > b[field] ? 1 : -1);
     }
 
-    if(sortBy === 'descending'){
-      return sortData.sort((a , b) => a[field] < b[field] ? 1 : -1);
+    if (sortBy === 'descending') {
+      return sortData.sort((a, b) => a[field] < b[field] ? 1 : -1);
     }
     return sortData
   }
 
-  changePagination<T>(paginationData: T[], dataPaginator : PaginatorData):T[]{
-    return paginationData.slice(dataPaginator.startItemIndex,dataPaginator.startItemIndex + dataPaginator.pageSize)
+  changePagination<T>(paginationData: T[], dataPaginator: PaginatorData): T[] {
+    return paginationData.slice(dataPaginator.startItemIndex, dataPaginator.startItemIndex + dataPaginator.pageSize);
   }
 
 }

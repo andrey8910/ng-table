@@ -30,25 +30,30 @@ export class TablePaginatorComponent implements OnInit, OnDestroy {
       emitEvent: false,
       onlySelf: true
     });
-    this.endItemIndex = this.startItemIndex + this.pageSizeControl.value;
+
     this.changePagination(this.startItemIndex, this.pageIndex, this.pageSizeControl.value,value);
-    if(this.pageIndex === 0){
-      this.isFirstPage = true;
-    }
     this.ref.markForCheck();
   };
 
   @Output() changeTablePagination = new EventEmitter<PaginatorData>();
 
   pageSizeControl = this.fb.nonNullable.control<number>(0);
-  pageIndex = 0;
-  startItemIndex = 0;
-  endItemIndex = 0;
   tableLength = 0;
-  isFirstPage = false;
-  isLastPage = false;
-
+  pageIndex = 0;
   private destroy$ = new Subject<void>();
+
+  get startItemIndex(): number{
+    return this.pageIndex * this.pageSizeControl.value
+  }
+  get endItemIndex():number {
+    return this.startItemIndex + this.pageSizeControl.value;
+  }
+  get isFirstPage(): boolean {
+  return this.pageIndex === 0;
+  }
+  get isLastPage(): boolean {
+    return (this.pageIndex + 1) * this.pageSizeControl.value >= this.tableLength
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -63,13 +68,7 @@ export class TablePaginatorComponent implements OnInit, OnDestroy {
           return
         }
 
-        this.isLastPage = this.startItemIndex >= this.tableLength  - size;
-        this.isFirstPage = this.pageIndex <= 0;
-
-
         if(this.startItemIndex <= this.tableLength  - size){
-          this.pageIndex = Math.round(this.startItemIndex / size);
-          this.endItemIndex = this.startItemIndex + this.pageSizeControl.value;
           this.changePagination(this.startItemIndex, this.pageIndex,size,this.tableLength);
         }
         this.ref.markForCheck();
@@ -80,69 +79,42 @@ export class TablePaginatorComponent implements OnInit, OnDestroy {
   }
 
   changePagination(startItemIndex: number,pageIndex: number, pageSize : number, length: number):void{
-
     const paginatorData: PaginatorData = {
       startItemIndex : startItemIndex,
       pageIndex : pageIndex,
       pageSize : pageSize,
       tableLength : length
     }
-    this.endItemIndex = this.startItemIndex + this.pageSizeControl.value;
     this.changeTablePagination.emit(paginatorData);
     this.ref.markForCheck();
   }
 
   goFirstPage():void{
     this.pageIndex = 0;
-    this.startItemIndex =0;
-    this.isFirstPage = true;
-    this.isLastPage = false;
     this.changePagination(this.startItemIndex,this.pageIndex,this.pageSizeControl.value,this.tableLength)
   }
 
   nextPage():void{
-    if(this.pageIndex >= this.tableLength / this.pageSizeControl.value - 1){
-      this.isLastPage = true;
+    if(this.endItemIndex >= this.tableLength){
       return
     }
     this.pageIndex++;
-    this.isFirstPage = false;
-    if(this.startItemIndex < this.tableLength){
-      this.startItemIndex += this.pageSizeControl.value;
-    }
-
     this.changePagination(this.startItemIndex,this.pageIndex,this.pageSizeControl.value,this.tableLength);
   }
 
   prevPage():void{
-    if(this.pageIndex <= 0){
-      this.isFirstPage = true;
+    if(this.startItemIndex <= 0){
       return
     }
-
-    if(this.startItemIndex < this.pageSizeControl.value){
-      this.startItemIndex = 0;
-      this.pageIndex = 0;
-      this.changePagination(this.startItemIndex,this.pageIndex,this.pageSizeControl.value,this.tableLength);
-      return
-    }
-
-    if(this.startItemIndex > 0){
-      this.pageIndex--;
-      this.isLastPage = false;
-      this.startItemIndex -= this.pageSizeControl.value;
-      this.changePagination(this.startItemIndex,this.pageIndex,this.pageSizeControl.value,this.tableLength);
-    }
+    this.pageIndex--;
+    this.changePagination(this.startItemIndex,this.pageIndex,this.pageSizeControl.value,this.tableLength);
   }
 
   goLastPage():void{
-    if(this.pageIndex >= this.tableLength / this.pageSizeControl.value - 1){
+    if(this.endItemIndex >= this.tableLength){
       return
     }
     this.pageIndex = (this.tableLength - this.pageSizeControl.value) / this.pageSizeControl.value;
-    this.startItemIndex = this.tableLength - this.pageSizeControl.value;
-    this.isLastPage = true;
-    this.isFirstPage = false;
     this.changePagination(this.startItemIndex,this.pageIndex,this.pageSizeControl.value,this.tableLength);
   }
 
