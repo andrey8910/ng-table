@@ -9,7 +9,7 @@ import {
   Output,
 } from '@angular/core';
 import {FormBuilder} from "@angular/forms";
-import { Subject, takeUntil, tap} from "rxjs";
+import {pairwise, startWith, Subject, takeUntil, tap} from "rxjs";
 import {PaginatorData} from "../interfaces/paginator-data";
 
 @Component({
@@ -63,13 +63,19 @@ export class TablePaginatorComponent implements OnInit, OnDestroy {
 
   ngOnInit():void {
     this.pageSizeControl.valueChanges.pipe(
-      tap((size:number) => {
+      startWith(this.pageSizeControl.value),
+      pairwise(),
+      tap((size:number[]) => {
+
         if(this.startItemIndex >= this.tableLength){
           return
         }
 
-        if(this.startItemIndex <= this.tableLength  - size){
-          this.changePagination(this.startItemIndex, this.pageIndex,size,this.tableLength);
+        this.pageIndex = (this.pageIndex * size[0]) / size[1] %2 === 0 ? (this.pageIndex * size[0]) / size[1] : Math.trunc((this.pageIndex * size[0]) / size[1]);
+        this.ref.markForCheck();
+        this.changePagination(this.startItemIndex, this.pageIndex,size[1],this.tableLength);
+        if(this.startItemIndex <= this.tableLength  - size[1]){
+
         }
         this.ref.markForCheck();
       }),
@@ -79,6 +85,7 @@ export class TablePaginatorComponent implements OnInit, OnDestroy {
   }
 
   changePagination(startItemIndex: number,pageIndex: number, pageSize : number, length: number):void{
+
     const paginatorData: PaginatorData = {
       startItemIndex : startItemIndex,
       pageIndex : pageIndex,
