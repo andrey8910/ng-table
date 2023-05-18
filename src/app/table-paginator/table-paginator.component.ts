@@ -31,7 +31,7 @@ export class TablePaginatorComponent implements OnInit, OnDestroy {
       onlySelf: true
     });
 
-    this.changePagination(this.startItemIndex, this.pageIndex, this.pageSizeControl.value,value);
+    this.changePagination(this.startItemIndex, this.pageSizeControl.value);
     this.ref.markForCheck();
   };
 
@@ -65,18 +65,9 @@ export class TablePaginatorComponent implements OnInit, OnDestroy {
     this.pageSizeControl.valueChanges.pipe(
       startWith(this.pageSizeControl.value),
       pairwise(),
-      tap((size:number[]) => {
-
-        if(this.startItemIndex >= this.tableLength){
-          return
-        }
-
-        this.pageIndex = (this.pageIndex * size[0]) / size[1] %2 === 0 ? (this.pageIndex * size[0]) / size[1] : Math.trunc((this.pageIndex * size[0]) / size[1]);
-        this.ref.markForCheck();
-        this.changePagination(this.startItemIndex, this.pageIndex,size[1],this.tableLength);
-        if(this.startItemIndex <= this.tableLength  - size[1]){
-
-        }
+      tap(([prev,next]:number[]) => {
+        this.pageIndex = Math.floor((this.pageIndex * prev) / next)
+        this.changePagination(this.startItemIndex, next);
         this.ref.markForCheck();
       }),
       takeUntil(this.destroy$)
@@ -84,13 +75,10 @@ export class TablePaginatorComponent implements OnInit, OnDestroy {
 
   }
 
-  changePagination(startItemIndex: number,pageIndex: number, pageSize : number, length: number):void{
-
+  changePagination(startItemIndex: number, pageSize : number ):void{
     const paginatorData: PaginatorData = {
       startItemIndex : startItemIndex,
-      pageIndex : pageIndex,
       pageSize : pageSize,
-      tableLength : length
     }
     this.changeTablePagination.emit(paginatorData);
     this.ref.markForCheck();
@@ -98,7 +86,7 @@ export class TablePaginatorComponent implements OnInit, OnDestroy {
 
   goFirstPage():void{
     this.pageIndex = 0;
-    this.changePagination(this.startItemIndex,this.pageIndex,this.pageSizeControl.value,this.tableLength)
+    this.changePagination(this.startItemIndex,this.pageSizeControl.value)
   }
 
   nextPage():void{
@@ -106,7 +94,7 @@ export class TablePaginatorComponent implements OnInit, OnDestroy {
       return
     }
     this.pageIndex++;
-    this.changePagination(this.startItemIndex,this.pageIndex,this.pageSizeControl.value,this.tableLength);
+    this.changePagination(this.startItemIndex,this.pageSizeControl.value);
   }
 
   prevPage():void{
@@ -114,7 +102,7 @@ export class TablePaginatorComponent implements OnInit, OnDestroy {
       return
     }
     this.pageIndex--;
-    this.changePagination(this.startItemIndex,this.pageIndex,this.pageSizeControl.value,this.tableLength);
+    this.changePagination(this.startItemIndex,this.pageSizeControl.value);
   }
 
   goLastPage():void{
@@ -122,7 +110,7 @@ export class TablePaginatorComponent implements OnInit, OnDestroy {
       return
     }
     this.pageIndex = (this.tableLength - this.pageSizeControl.value) / this.pageSizeControl.value;
-    this.changePagination(this.startItemIndex,this.pageIndex,this.pageSizeControl.value,this.tableLength);
+    this.changePagination(this.startItemIndex,this.pageSizeControl.value);
   }
 
   ngOnDestroy():void {
